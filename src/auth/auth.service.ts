@@ -16,10 +16,7 @@ export class AuthService {
         throw new UnauthorizedException()
       }
     }
-    // if (user?.password !== "$2b$10$kY6F2hpH9jt39knXOYxRP.r.5P8aT/5nutmMxJRGuArvkl5/qFPfq") {
-    //   console.log("hellow");
-    //   throw new UnauthorizedException();
-    // }
+   
      const payload = { sub: user?.id ,useremail: user?.email};
 
      return {

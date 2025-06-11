@@ -20,6 +20,9 @@ export class User {
     @Column({ type: 'enum', enum: ['m', 'f', 'u'] })
     gender: string;
 
+    @Column({nullable:true})
+    profilePic:string
+
     @CreateDateColumn()
     createdAt:Date
 

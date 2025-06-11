@@ -25,3 +25,25 @@ export class MailerService {
   }
 }
 
+
+//      import { Injectable } from '@nestjs/common';
+//      import { MailerService } from '@nestjs-modules/mailer';
+
+//      @Injectable()
+//      export class UserService {
+//        constructor(private mailerService: MailerService) {}
+
+//        async sendWelcomeEmail(user: any) {
+//          await this.mailerService.sendMail({
+//            to: user.email,
+//            subject: 'Welcome to our App!',
+//            template: 'welcome',
+//            context: {
+//              name: user.name,
+//            },
+//          });
+//        }
+//      }
+
+// export { MailerService };
+

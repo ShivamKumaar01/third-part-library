@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,13 +6,22 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from 'src/mailer/mailer.service';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+// import { Cloudinary } from 'src/cloudinary/entities/cloudinary.entity';
+// import { Cloudinary } from 'src/cloudinary/entities/cloudinary.entity';
 
 const saltOrRounds = 10;
 
 @Injectable()
+
 export class UserService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>,
+
+  constructor(
+
+  @InjectRepository(User) private userRepository: Repository<User>,
+  private readonly cloudanryService:CloudinaryService ,
   private readonly mailerService:MailerService) { }
+
   async create(createUserDto: CreateUserDto) {
     const user: User = new User()
     user.name = createUserDto.name
@@ -38,9 +47,24 @@ export class UserService {
     return this.userRepository.findOne({where:{email:email}})
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number,file:Express.Multer.File) {
+    const user=await this.userRepository.findOne({where:{id:id}})
+    if(!user){
+      throw new NotFoundException()
+    }
+    
+    console.log("User Email: ",user.email)
+    const result = await this.cloudanryService.uploadImage(file);
+    user.profilePic = result.secure_url;
+    this.userRepository.save(user);
+
+    return{
+
+      message:'User Profile Picture ha been updated',
+      user
+    }
   }
+
 
   remove(id: number) {
     return `This action removes a #${id} user`;

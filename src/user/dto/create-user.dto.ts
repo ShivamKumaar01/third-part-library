@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsInt, IsString } from "class-validator";
+import { IsEmail, IsEnum, IsInt, IsOptional, IsString } from "class-validator";
 
 export class CreateUserDto {
     @IsString()
@@ -12,6 +12,10 @@ export class CreateUserDto {
 
     @IsInt()
     age: number
+
+    @IsString()
+    @IsOptional()
+    ProfilePic?:string
 
     @IsEnum(['m', 'f', 'u'], { message: 'gender must be m, f or u' })
     gender: string;

@@ -6,7 +6,7 @@ import { JwtAuthGuard } from './jwt.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -14,9 +14,9 @@ export class AuthController {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 
-    @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req: any) {
-    return req.user; 
+    return req.user;
   }
 }

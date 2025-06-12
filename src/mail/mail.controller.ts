@@ -1,8 +1,5 @@
-// import { Controller } from '@nestjs/common';
 
-// @Controller('mail')
-// export class MailController {}
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { MailService } from './mail.service';
 
 @Controller('mail')
@@ -12,11 +9,10 @@ export class MailController {
   @Get()
   async sendMail() {
     await this.mailService.sendEmail({
+      to: 'shivamkumaar01@gmail.com', 
       subject: 'Welcome to the realm of NestJS',
-    //   template: 'signup-confirmation-template',
-      // context: {
-      //   name: 'Jhon Doe',
-      // },
     });
+
+    return { message: 'Email sent!' };
   }
 }

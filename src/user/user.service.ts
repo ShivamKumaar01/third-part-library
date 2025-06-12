@@ -37,10 +37,13 @@ export class UserService {
       subject : "lkfdhguirhi",
       context :{ to : createUserDto.email }
     }
-    this.mailerService.sendEmail(param)
-    // this.userRepository.save(user)
-    return;
-    // return { message: "user registerd successfully"};
+     await this.mailerService.sendEmail({
+    to: createUserDto.email,
+    subject: `👋 Welcome to our app, ${createUserDto.name}!`,
+  });
+    
+    return { message: 'User registered successfully' };
+
   }
 
   findAll() {

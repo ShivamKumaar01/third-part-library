@@ -1,4 +1,7 @@
-import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
+
+
+
+import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
@@ -8,40 +11,24 @@ export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendEmail(params: {
+    to: string;
     subject: string;
-    // template: string;
-    // context: ISendMailOptions['context'];
+    // template?: string;
+    // context?: any;
   }) {
     try {
-      const emailsList = process.env.SMTP_TO?.split(',');
-
-      if (!emailsList) {
-        throw new Error(
-          `No recipients found in SMTP_TO env var, please check your .env file`,
-        );
-      }
-
       const sendMailParams = {
-        to: emailsList,
-        from: process.env.SMTP_FROM,
+        to: params.to,
+        from: process.env.SMTP_FROM || 'default@example.com',
         subject: params.subject,
         // template: params.template,
         // context: params.context,
       };
+
       const response = await this.mailerService.sendMail(sendMailParams);
-      this.logger.log(
-        `Email sent successfully to recipients with the following parameters : ${JSON.stringify(
-          sendMailParams,
-        )}`,
-        response,
-      );
+      this.logger.log(` Email sent to: ${params.to}`, response);
     } catch (error) {
-      this.logger.error(
-        `Error while sending mail with the following parameters : ${JSON.stringify(
-          params,
-        )}`,
-        error,
-      );
+      this.logger.error(` Error sending mail:`, error.stack);
     }
   }
 }

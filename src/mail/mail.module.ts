@@ -1,12 +1,3 @@
-// import { Module } from '@nestjs/common';
-// import { MailService } from './mail.service';
-// import { MailController } from './mail.controller';
-
-// @Module({
-//   providers: [MailService],
-//   controllers: [MailController]
-// })
-// export class MailModule {}
 
 import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
@@ -21,14 +12,15 @@ dotenv.config();
       useFactory: () => ({
         transport: {
           host: process.env.SMTP_HOST,
-          // port: +process.env.SMTP_PORT,
+          port: parseInt(process.env.SMTP_PORT || '587', 10),
           secure: false,
-          tls: {
-            rejectUnauthorized: false,
+          auth: {
+            user: process.env.SMTP_FROM,
+            pass: process.env.SMTP_PASS,
           },
         },
         defaults: {
-          from: process.env.FROM,
+          from: `"NestJS App" <${process.env.SMTP_FROM}>`,
         },
       }),
     }),
@@ -38,3 +30,5 @@ dotenv.config();
   controllers: [MailController],
 })
 export class MailModule {}
+
+

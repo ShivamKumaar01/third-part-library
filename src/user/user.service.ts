@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { MailerService } from 'src/mailer/mailer.service';
+import { MailService } from 'src/mail/mail.service';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 // import { Cloudinary } from 'src/cloudinary/entities/cloudinary.entity';
 // import { Cloudinary } from 'src/cloudinary/entities/cloudinary.entity';
@@ -20,7 +20,7 @@ export class UserService {
 
   @InjectRepository(User) private userRepository: Repository<User>,
   private readonly cloudanryService:CloudinaryService ,
-  private readonly mailerService:MailerService) { }
+  private readonly mailerService:MailService) { }
 
   async create(createUserDto: CreateUserDto) {
     const user: User = new User()
@@ -31,9 +31,16 @@ export class UserService {
     user.password = hashPassword
     user.age = createUserDto.age
     user.gender = createUserDto.gender
-    this.mailerService.sendWelcomeEmail(createUserDto.email,createUserDto.name)
-    this.userRepository.save(user)
-    return { message: "user registerd successfully"};
+    // this.mailerService.sendWelcomeEmail(createUserDto.email,createUserDto.name)
+
+    const param = {
+      subject : "lkfdhguirhi",
+      context :{ to : createUserDto.email }
+    }
+    this.mailerService.sendEmail(param)
+    // this.userRepository.save(user)
+    return;
+    // return { message: "user registerd successfully"};
   }
 
   findAll() {

@@ -17,6 +17,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req: any) {
-    return req.user;
+    return {message:"welcome to prfile page"}
   }
 }
